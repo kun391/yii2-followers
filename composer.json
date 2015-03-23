@@ -1,0 +1,14 @@
+{
+    "name": "kun391/yii2-followers",
+    "versions": "1.0",
+    "description": "The widget used to get number of followers from social networks",
+    "authors": [{
+        "name": "Kun",
+        "email": "nguyentruongthanh.dn@gmail.com"
+    }],
+    "autoload": {
+        "psr-4": {
+            "kun391\\socials\\": "/"
+        }
+    }
+}
