@@ -38,7 +38,10 @@ class FollowerSocial extends \yii\base\widget
      *
      * @var string
      */
-    public $apiKey = 'AIzaSyCrcTlPZtwjiBFkg6MRLHOOlpgITitGiGU';
+    public $apiKey = 'AIzaSyCbqnMP7p6MylSCC2yc9TBAETwaILHmogc';
+
+    public $fbAppId = '615985471754714';
+    public $fbSecret = '39c01895042b54e758d566ebbfe56a1a';
 
     /**
      * ID/Username of target to get followers
@@ -70,10 +73,10 @@ class FollowerSocial extends \yii\base\widget
         if ($this->social == self::FOLLOWER_GOOGLE) {
             $this->urlAPI = "https://www.googleapis.com/plus/v1/people/{$this->people}?key={$this->apiKey}";
         } elseif ($this->social == self::FOLLOWER_FACEBOOK) {
-            $this->urlAPI = "http://graph.facebook.com/{$this->people}";
+            $this->urlAPI = "https://graph.facebook.com/{$this->people}?access_token={$this->fbAppId}|{$this->fbSecret}";
             $this->attribute = 'likes';
         } elseif ($this->social == self::FOLLOWER_YOUTUBE) {
-            $this->urlAPI = "http://gdata.youtube.com/feeds/api/users/{$this->people}?alt=json";
+            $this->urlAPI = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id={$this->people}&key={$this->apiKey}";
             $this->attribute = "subscriberCount";
         }
     }
@@ -86,10 +89,10 @@ class FollowerSocial extends \yii\base\widget
     public function run()
     {
         if (!empty($this->urlAPI)) {
-            $followers = $this->getReponse($this->urlAPI, false);
+            $followers = $this->getResponse($this->urlAPI, false);
         }
-        if ($this-> social == self::FOLLOWER_YOUTUBE) {
-            $followers = $followers->entry->{'yt$statistics'};
+        if ($this->social == self::FOLLOWER_YOUTUBE) {
+            $followers = $followers->items[0]->statistics;
         }
         return isset($followers) ? Html::encode((int) $followers->{$this->attribute}) : Html::encode(0);
     }
